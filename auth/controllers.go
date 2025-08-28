@@ -2,10 +2,11 @@ package auth
 
 import (
 	"net/http"
+
+	"github.com/che4web/go4rest"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"github.com/gin-contrib/sessions"
-	"github.com/che4web/go4rest"
 )
 
 type AuthHandler struct {
@@ -105,9 +106,9 @@ func (h *AuthHandler) WhoI(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"id":       user.ID,
-		"username": user.Username,
-		"role": user.Role,
+		"id":         user.ID,
+		"username":   user.Username,
+		"role":       user.Role,
 		"created_at": user.CreatedAt,
 	})
 }
@@ -117,11 +118,12 @@ type UserController struct {
 	db *gorm.DB
 }
 
-func NewUserController(db *gorm.DB) *UserController{
-	vw :=go4rest.NewViewSet[User](db)
+func NewUserController(db *gorm.DB) *UserController {
+	vw := go4rest.NewViewSet[User](db)
+	vw.PreloadField = []string{"Role"}
 	return &UserController{
 		ViewSet: vw,
-		db:         db,
+		db:      db,
 	}
 }
 
@@ -130,10 +132,10 @@ type RoleController struct {
 	db *gorm.DB
 }
 
-func NewRoleController(db *gorm.DB) *RoleController{
-	vw :=go4rest.NewViewSet[Role](db)
+func NewRoleController(db *gorm.DB) *RoleController {
+	vw := go4rest.NewViewSet[Role](db)
 	return &RoleController{
 		ViewSet: vw,
-		db:         db,
+		db:      db,
 	}
 }
