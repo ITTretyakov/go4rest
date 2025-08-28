@@ -13,9 +13,9 @@ type Role struct {
 type User struct {
 	gorm.Model
 	Username string `gorm:"unique;not null"`
-	Password string `gorm:"not null"`
+	Password string `gorm:"not null" json:"-"`
 	RoleID   uint
-	Role Role `gorm:"foreignKey:RoleID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Role     Role `gorm:"foreignKey:RoleID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 // HashPassword хеширует пароль перед сохранением
